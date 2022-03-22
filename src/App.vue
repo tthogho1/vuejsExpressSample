@@ -1,8 +1,8 @@
 <template>
+  <button type="button" class="btn btn-primary" v-on:click="getWebCamList()">Search </button>
   <div class="container-fluid">
     <webCamList v-for="item in list"  v-bind:key="item" v-bind:webCam="item" />
   </div>
-  <button type="button" class="btn btn-primary" v-on:click="getWebCamList()">getList</button>
 </template>
 
 <script>
@@ -19,7 +19,7 @@ export default {
     webCamList
   },
   methods: {
-    getWebCamList() {
+    getWebCamList:function() {
       this.axios.get("/api/list").then((response) => {
         console.log(response.data);
         this.list=response.data;
