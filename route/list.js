@@ -13,8 +13,9 @@ const collectionName = 'webcom';
  */
 router.get('/', function (req, res) {
 
+    let code = req.query.countrycd;
     try {
-        transaction().then(value => {
+        transaction(code).then(value => {
             res.header('Content-Type', 'application/json; charset=utf-8')
          //   res.header("Access-Control-Allow-Origin", "*");
           //  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
@@ -31,7 +32,7 @@ router.get('/', function (req, res) {
 });
 
 
-const transaction = async () => {
+const transaction = async (countrycd) => {
     let client;
 
     try {
@@ -44,7 +45,7 @@ const transaction = async () => {
         let list = [];
         //let docs = 
         await db.collection(collectionName)
-        .find({$and: [ {status: "active"},{"location.country_code":"JP"} ]})
+        .find({$and: [ {status: "active"},{"location.country_code":countrycd} ]})
         .sort({"id":1}).limit(100).forEach(function (doc){
 
             let webComData = {
