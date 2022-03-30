@@ -6,4 +6,7 @@ import 'bootstrap-vue/dist/bootstrap-vue.css'
 import axios from 'axios'
 import VueAxios from 'vue-axios'
 
-createApp(App).use(VueAxios, axios).mount('#app')
+const app = createApp(App)
+app.config.devtools = true;
+//createApp(App).use(VueAxios, axios).mount('#app')
+app.use(VueAxios, axios).mount('#app')

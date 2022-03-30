@@ -1,7 +1,7 @@
 <template>
   <div class="webCamList">
     <div class="row">
-      <div class="col-3">{{ webCam.id }}</div>
+      <div class="col-2">{{ webCam.id }}</div>
       <div class="col-3"><img v-bind:src="webCam.thumbnail" ></div>
       <div class="col-4"><a href='#' v-on:click="openPlayer(webCam.player)" >{{webCam.player}}</a></div>
     </div>

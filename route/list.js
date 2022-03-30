@@ -14,6 +14,7 @@ const collectionName = 'webcom';
 router.get('/', function (req, res) {
 
     let code = req.query.countrycd;
+    let lastid = req.query.lastid;
     try {
         transaction(code).then(value => {
             res.header('Content-Type', 'application/json; charset=utf-8')
@@ -44,8 +45,9 @@ const transaction = async (countrycd) => {
         let db = client.db(collectionName);
         let list = [];
         //let docs = 
+        let condition = [ {status: "active"},{"location.country_code":countrycd} ] ;
         await db.collection(collectionName)
-        .find({$and: [ {status: "active"},{"location.country_code":countrycd} ]})
+        .find({$and: condition })
         .sort({"id":1}).limit(100).forEach(function (doc){
 
             let webComData = {
@@ -57,7 +59,7 @@ const transaction = async (countrycd) => {
             list.push(webComData);
         });
 
-        console.log(list);
+        // console.log(list);
 
         return (list);
     } catch (error) {

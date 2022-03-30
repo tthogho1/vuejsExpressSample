@@ -13,12 +13,16 @@
       <div class="col-3">
         <button type="button" class="btn btn-primary" v-on:click="getWebCamList()">Search </button>
       </div>
+      <div class="col-3">
+        <button type="button" class="btn btn-primary" v-on:click="nextWebCamList()">Next </button>
+      </div>
     </div>
     <div class="row">
-      <div class="col-3">ID</div>
-      <div class="col-3">thumbnail</div>
-      <div class="col-4">URL</div>
+      <div class="card col-2 text-center bg-secondary">ID</div>
+      <div class="card col-3 text-center bg-secondary">ThumbNail</div>
+      <div class="card col-4 text-center bg-secondary">Player URL</div>
     </div>
+    <div>{{lastid}}</div>
     <webCamList v-for="item in list"  v-bind:key="item" v-bind:webCam="item" />
   </div>
 </template>
@@ -31,7 +35,9 @@ export default {
   data(){
     return {
        list:[],
-       countrycd:''
+       countrycd:'',
+       savedcountrycd:'',
+       lastid:''
     }
   },
   components: {
@@ -39,12 +45,24 @@ export default {
   },
   methods: {
     getWebCamList:function() {
+      this.savedcountrycd = this.countrycd;
       this.axios.get("/api/list",{
         params:{
           countrycd : this.countrycd
         }
       }).then((response) => {
-        console.log(response.data);
+        this.list=response.data;
+        this.lastid= this.list[this.list.length-1].id
+      })
+    },
+    nextWebCamList:function() {
+      this.axios.get("/api/list",{
+        params:{
+          countrycd : this.savedcountrycd,
+          lastid : this.list[this.list.length-1].id
+        }
+      }).then((response) => {
+        // console.log(response.data);
         this.list=response.data;
       })
     }
