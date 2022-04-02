@@ -45,11 +45,11 @@ const transaction = async (countrycd,lastid) => {
         let db = client.db(collectionName);
         let list = [];
         //let docs = 
-        let condition = [ {"status": "active"},{"location.country_code":countrycd},{"id":{$gt:lastid }}] ;
+        let condition = [ {"status": "active"},{"location.country_code":countrycd},{"id":{$lt:lastid }}] ;
 
         await db.collection(collectionName)
         .find({$and: condition })
-        .sort({"id":1}).limit(100).forEach(function (doc){
+        .sort({"id":-1}).limit(100).forEach(function (doc){
 
             let webComData = {
                 id : doc.id,
@@ -57,7 +57,7 @@ const transaction = async (countrycd,lastid) => {
                 player: doc.player.day.link
             };
              
-            list.push(webComData);
+            list.unshift(webComData);
         });
 
         // console.log(list);

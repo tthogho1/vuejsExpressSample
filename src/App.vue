@@ -14,7 +14,8 @@
         <button type="button" class="btn btn-primary" v-on:click="getWebCamList()">Search </button>
       </div>
       <div class="col-3">
-        <button type="button" class="btn btn-primary" v-on:click="nextWebCamList()">Next </button>
+        <button type="button" class="btn btn-primary" v-on:click="prevWebCamList()">Prev</button>
+        <button type="button" class="btn btn-primary" v-on:click="nextWebCamList()">Next</button>
       </div>
     </div>
     <div class="row">
@@ -22,7 +23,6 @@
       <div class="card col-3 text-center bg-secondary">ThumbNail</div>
       <div class="card col-4 text-center bg-secondary">Player URL</div>
     </div>
-    <div>{{lastid}}</div>
     <webCamList v-for="item in list"  v-bind:key="item" v-bind:webCam="item" />
   </div>
 </template>
@@ -60,6 +60,17 @@ export default {
         params:{
           countrycd : this.savedcountrycd,
           lastid : this.list[this.list.length-1].id
+        }
+      }).then((response) => {
+        // console.log(response.data);
+        this.list=response.data;
+      })
+    },
+    prevWebCamList:function() {
+      this.axios.get("/api/prev",{
+        params:{
+          countrycd : this.savedcountrycd,
+          lastid : this.list[0].id
         }
       }).then((response) => {
         // console.log(response.data);
