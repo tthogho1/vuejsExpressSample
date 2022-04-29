@@ -1,3 +1,4 @@
+const { BIconSortNumericUpAlt } = require('bootstrap-vue');
 var express = require('express');
 var router = express.Router();
 
@@ -46,7 +47,6 @@ const transaction = async (countrycd,lastid) => {
         let list = [];
         //let docs = 
         let condition = [ {"status": "active"},{"location.country_code":countrycd},{"id":{$gt:lastid }}] ;
-
         await db.collection(collectionName)
         .find({$and: condition })
         .sort({"id":1}).limit(100).forEach(function (doc){
@@ -54,14 +54,13 @@ const transaction = async (countrycd,lastid) => {
             let webComData = {
                 id : doc.id,
                 thumbnail: doc.image.daylight.thumbnail,
-                player: doc.player.day.link
+                player: doc.player.day.link,
+                latitude: doc.location.latitude,
+                longitude: doc.location.longitude 
             };
-             
             list.push(webComData);
         });
-
-        // console.log(list);
-
+        
         return (list);
     } catch (error) {
         console.log(error);
@@ -69,7 +68,6 @@ const transaction = async (countrycd,lastid) => {
         client.close();
 
     }
-
 }
 
 module.exports = router;

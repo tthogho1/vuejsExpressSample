@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build",
+    "build": "vue-cli-service build --mode development",
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
@@ -16,7 +16,8 @@
     "mongodb": "^4.4.1",
     "sync-request": "^6.1.0",
     "vue": "^3.2.13",
-    "vue-axios": "^3.4.1"
+    "vue-axios": "^3.4.1",
+    "vue-router": "^4.0.13"
   },
   "devDependencies": {
     "@babel/core": "^7.12.16",
