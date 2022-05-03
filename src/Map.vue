@@ -1,26 +1,30 @@
 <template>
-  <div class="alert alert-primary">
-    <h1>{{data.title}}</h1>
-    <p class="mt-3 h5">{{data.msg}}</p>
-  </div>
+<div>
+ <h1>Google Map</h1>
+ <div ref="map" style="height:500px;width:800px;"></div>
+</div>
 </template>
 
 <script>
-import { reactive } from 'vue'
-
 export default {
-  name: 'WebCamMap',
-  setup(){
-    const data = reactive({
-      title : 'map',
-      msg: 'thi is map'
-    })
+  name: 'webCamMap',
+  data(){
     return {
-      data
+      map:'',
     }
+  },
+  mounted(){
+    //alert(this.$route.query.arr);
+    let latlng = this.$route.query.arr;
+    let timer = setInterval(() => {
+      if(window.google){
+        clearInterval(timer);
+        this.map = new window.google.maps.Map(this.$refs.map, {
+          center: {lat: parseFloat(latlng[0]), lng: parseFloat(latlng[1])},
+          zoom: 8
+        });       
+      }
+    },500)
   }
 }
 </script>
-
-<style>
-</style>

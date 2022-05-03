@@ -10,6 +10,9 @@
           <option>US</option>
         </select>
       </div>
+      <div class="col-2">
+        <router-link :to="{name: 'map', query: {arr:[avgLat,avgLng]} }" class="btn btn-warning"></router-link>
+      </div>
       <div class="col-3">
         <button type="button" class="btn btn-primary" v-on:click="getWebCamList()">Search </button>
       </div>
@@ -37,7 +40,6 @@ export default {
        list:[],
        countrycd:'',
        savedcountrycd:'',
-       lastid:'',
        avgLat:'',
        avgLng:''
     }
@@ -62,7 +64,7 @@ export default {
           sumLng += parseInt(element.longitude) ;                         
         });
         if (sumLat != 0){
-          this.avtLat = sumLat / this.list.length;
+          this.avgLat = sumLat / this.list.length;
         }
         if (sumLng != 0){
           this.avgLng = sumLng / this.list.length;
