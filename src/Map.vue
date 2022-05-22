@@ -6,6 +6,25 @@
 </template>
 
 <script>
+
+function createItemMarker(id,latlng){
+
+	var marker = new window.google.maps.Marker({
+		position: latlng,
+		title: id
+	});
+
+	return marker ;
+}
+
+function setItemIcon(data,map){
+	data.forEach(element => {
+		var latlng = new window.google.maps.LatLng(element.latitude ,element.longitude );
+		var marker = createItemMarker(element.id,latlng);
+		marker.setMap(map);
+	});
+}
+
 export default {
   name: 'webCamMap',
   data(){
@@ -13,16 +32,23 @@ export default {
       map:'',
     }
   },
-  mounted(){
-    //alert(this.$route.query.arr);
+  mounted(){ 
+    let webCamList = this.$store.state.list;
+//    alert(this.list);
+//    alert(this.$route.query.arr);
     let latlng = this.$route.query.arr;
+    let webCamMap ;
     let timer = setInterval(() => {
       if(window.google){
         clearInterval(timer);
-        this.map = new window.google.maps.Map(this.$refs.map, {
+        webCamMap = new window.google.maps.Map(this.$refs.map, {
           center: {lat: parseFloat(latlng[0]), lng: parseFloat(latlng[1])},
           zoom: 8
-        });       
+        }); 
+        window.google.maps.event.addListenerOnce(webCamMap,'tilesloaded',function(){
+          //alert('load');
+          setItemIcon(webCamList,webCamMap);
+        })
       }
     },500)
   }

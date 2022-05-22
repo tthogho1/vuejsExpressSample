@@ -41,7 +41,8 @@ export default {
        countrycd:'',
        savedcountrycd:'',
        avgLat:'',
-       avgLng:''
+       avgLng:'',
+       firstId:'',
     }
   },
   components: {
@@ -56,9 +57,11 @@ export default {
         }
       }).then((response) => {
         this.list=response.data;
-        this.lastid= this.list[this.list.length-1].id
+        this.$store.commit('savelist',this.list);
+        this.lastid= this.list[this.list.length-1].id;
+        this.firstId = this.list[0].id;
         let sumLat = 0;
-        let sumLng = 0;
+        let sumLng = 0; 
         this.list.forEach(element => {
           sumLat += parseInt(element.latitude) ;
           sumLng += parseInt(element.longitude) ;                         
@@ -76,7 +79,7 @@ export default {
         params:{
           countrycd : this.savedcountrycd,
           lastid : this.list[this.list.length-1].id
-        }
+        } 
       }).then((response) => {
         // console.log(response.data);
         this.list=response.data;
