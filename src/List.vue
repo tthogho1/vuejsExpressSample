@@ -33,6 +33,26 @@
 <script>
 import webCamList from './components/WebCamList.vue'
 
+function calcCenter(t_list){
+  let sumLat = 0;
+  let sumLng = 0; 
+  t_list.forEach(element => {
+    sumLat += parseInt(element.latitude) ;
+    sumLng += parseInt(element.longitude) ;                         
+  });
+  let avgLat = 0;
+  let avgLng = 0;
+  if (sumLat != 0){
+    avgLat = sumLat / t_list.length;
+  }
+  if (sumLng != 0){
+    avgLng = sumLng / t_list.length;
+  }
+
+  return {'avgLat':avgLat,'avgLng':avgLng}
+}
+
+
 export default {
   name: 'ImgList',
   data(){
@@ -42,8 +62,16 @@ export default {
        savedcountrycd:'',
        avgLat:'',
        avgLng:'',
-       firstId:'',
     }
+  },
+  mounted(){
+    this.list = this.$store.state.list;
+    this.countrycd = this.$store.state.countrycd;
+    this.savedcountrycd = this.$store.state.countrycd;
+
+    let center = calcCenter(this.list);
+    this.avgLat = center['avgLat'];
+    this.avgLng = center['avgLng'];
   },
   components: {
     webCamList
@@ -58,20 +86,10 @@ export default {
       }).then((response) => {
         this.list=response.data;
         this.$store.commit('savelist',this.list);
-        this.lastid= this.list[this.list.length-1].id;
-        this.firstId = this.list[0].id;
-        let sumLat = 0;
-        let sumLng = 0; 
-        this.list.forEach(element => {
-          sumLat += parseInt(element.latitude) ;
-          sumLng += parseInt(element.longitude) ;                         
-        });
-        if (sumLat != 0){
-          this.avgLat = sumLat / this.list.length;
-        }
-        if (sumLng != 0){
-          this.avgLng = sumLng / this.list.length;
-        }
+        this.$store.commit('savecountrycd',this.savedcountrycd);
+        let center = calcCenter(this.list);
+        this.avgLat = center['avgLat'];
+        this.avgLng = center['avgLng'];
       })
     },
     nextWebCamList:function() {
@@ -83,6 +101,12 @@ export default {
       }).then((response) => {
         // console.log(response.data);
         this.list=response.data;
+        this.$store.commit('savelist',this.list);
+        this.$store.commit('savecountrycd',this.savedcountrycd);
+        let center = calcCenter(this.list);
+        this.avgLat = center['avgLat'];
+        this.avgLng = center['avgLng'];
+
       })
     },
     prevWebCamList:function() {
@@ -94,6 +118,12 @@ export default {
       }).then((response) => {
         // console.log(response.data);
         this.list=response.data;
+        this.$store.commit('savelist',this.list);
+        this.$store.commit('savecountrycd',this.savedcountrycd);
+        let center = calcCenter(this.list);
+        this.avgLat = center['avgLat'];
+        this.avgLng = center['avgLng'];
+
       })
     }
   }
