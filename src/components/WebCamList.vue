@@ -3,12 +3,14 @@
     <div class="row">
       <div class="col-2">{{ webCam.id }}</div>
       <div class="col-3"><img v-bind:src="webCam.thumbnail" ></div>
-      <div class="col-4"><a href='#' v-on:click="openPlayer(webCam.player)" >{{webCam.player}}</a></div>
+      <div class="col-4"><a href='#' v-on:click="openPlayer(webCam.player,webCam.thumbnail)" >{{webCam.player}}</a></div>
     </div>
   </div>
 </template>
 
 <script>
+import config from '../const/const.js'
+
 export default {
   name: 'webCamList',
   props: {
@@ -18,9 +20,24 @@ export default {
         player:String
       }
   },
+  emits:['getRecommend'],
   methods:{
-    openPlayer : function(link){
-      window.open(link);    
+    openPlayer : async function(link,imgUrl){
+      const url = config.IMG_SERVER_HOST + "getSimilarImageUrl";
+      //const url = "http://127.0.0.1:56653/file_upload/getSimilarImageUrl";
+      const querystring = require("querystring");
+      const res = await this.axios.post(url,
+        querystring.stringify({
+            imgUrl: imgUrl, //gave the values directly for testing
+      }), {
+        headers: { 
+          "Content-Type": "application/x-www-form-urlencoded"
+        }
+      });
+      let recolist = res.data;
+      this.$emit('getRecommend', recolist)
+
+      window.open(link); 
     }
   }
 }

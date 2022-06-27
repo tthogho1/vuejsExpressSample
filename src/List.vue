@@ -21,17 +21,26 @@
         <button type="button" class="btn btn-primary" v-on:click="nextWebCamList()">Next</button>
       </div>
     </div>
-    <div class="row">
+    <div class="row" style="width:80%">
       <div class="card col-2 text-center bg-secondary">ID</div>
       <div class="card col-3 text-center bg-secondary">ThumbNail</div>
       <div class="card col-4 text-center bg-secondary">Player URL</div>
     </div>
-    <webCamList v-for="item in list"  v-bind:key="item" v-bind:webCam="item" />
+    <div>
+      <div style="float: left;width:80%">
+        <webCamList @getRecommend="getRecommend" v-for="item in list"  v-bind:key="item" v-bind:webCam="item" />
+      </div>
+      <div style="float: left;width:20%">
+        <reCommendlist  v-for="item in recolist"  v-bind:key="item" v-bind:reCommend="item"/>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
 import webCamList from './components/WebCamList.vue'
+import reCommendlist from './components/ReCommendlist.vue'
+
 
 function calcCenter(t_list){
   let sumLat = 0;
@@ -52,7 +61,6 @@ function calcCenter(t_list){
   return {'avgLat':avgLat,'avgLng':avgLng}
 }
 
-
 export default {
   name: 'ImgList',
   data(){
@@ -62,6 +70,7 @@ export default {
        savedcountrycd:'',
        avgLat:'',
        avgLng:'',
+       recolist:[]
     }
   },
   mounted(){
@@ -74,7 +83,8 @@ export default {
     this.avgLng = center['avgLng'];
   },
   components: {
-    webCamList
+    webCamList,
+    reCommendlist,
   },
   methods: {
     getWebCamList:function() {
@@ -125,6 +135,10 @@ export default {
         this.avgLng = center['avgLng'];
 
       })
+    },
+    getRecommend:function(recolist){
+      // 0 - similarity 1 : distance
+      this.recolist = recolist[0];
     }
   }
 }
