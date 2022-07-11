@@ -13,7 +13,7 @@ function createItemMarker(id,latlng){
 		position: latlng,
 		title: id
 	});
-
+ 
 	return marker ;
 }
 
@@ -21,6 +21,23 @@ function setItemIcon(data,map){
 	data.forEach(element => {
 		var latlng = new window.google.maps.LatLng(element.latitude ,element.longitude );
 		var marker = createItemMarker(element.id,latlng);
+
+   var contentStr = '<p>' +
+    '<img src="' + element.thumbnail + '" width="100" height="100" />' + 
+    '</p>';
+  
+    var infowindow = new window.google.maps.InfoWindow({
+      content: contentStr
+    });
+
+    marker.addListener("click", () => {
+      infowindow.open({
+        anchor: marker,
+        map,
+        shouldFocus: false,
+      });
+    });
+
 		marker.setMap(map);
 	});
 }

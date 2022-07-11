@@ -20,7 +20,7 @@ export default {
   },
   computed:{
     downloadUrl(){
-      const base = config.IMG_SERVER_HOST + "downnload";
+      const base = config.IMG_SERVER_HOST + "download/";
       //const base = "http://127.0.0.1:56653/file_upload/download/";
       return function(file){
         return base + file;

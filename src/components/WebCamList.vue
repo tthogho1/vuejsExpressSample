@@ -26,17 +26,21 @@ export default {
       const url = config.IMG_SERVER_HOST + "getSimilarImageUrl";
       //const url = "http://127.0.0.1:56653/file_upload/getSimilarImageUrl";
       const querystring = require("querystring");
-      const res = await this.axios.post(url,
-        querystring.stringify({
-            imgUrl: imgUrl, //gave the values directly for testing
-      }), {
-        headers: { 
-          "Content-Type": "application/x-www-form-urlencoded"
-        }
-      });
-      let recolist = res.data;
-      this.$emit('getRecommend', recolist)
-
+      try {
+        const res = await this.axios.post(url,
+          querystring.stringify({
+             imgUrl: imgUrl, //gave the values directly for testing
+        }), {
+          headers: { 
+           "Content-Type": "application/x-www-form-urlencoded"
+          }
+        });
+        let recolist = res.data;
+        this.$emit('getRecommend', recolist)
+      }catch(e){ 
+        console.log(e);
+        // alert(e);
+      }
       window.open(link); 
     }
   }
