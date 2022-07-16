@@ -2,7 +2,7 @@
   <div class="reCommendlist">
     <div>
       <div>{{ reCommend.file }}</div>
-      <div><img v-bind:src="downloadUrl(reCommend.file)"></div>
+      <div><img v-bind:src="downloadUrl(reCommend.file)" v-on:click="openWindow(reCommend.file)"></div>
     </div>
   </div>
 </template>
@@ -26,6 +26,20 @@ export default {
         return base + file;
       }
     }
+  },
+  methods:{
+    openWindow: function(name) {
+      let webcamid = name.replace('.jpg','');
+      let params = new URLSearchParams();
+      params.append('id', webcamid);
+      
+      this.axios.post("/api/getbyid",params)
+      .then((response) => {
+          let list = []
+          list = response.data;
+          window.open(list[0].player);
+      })
+    }      
   }
 }
 </script>

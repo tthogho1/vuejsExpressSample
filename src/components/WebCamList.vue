@@ -25,18 +25,29 @@ export default {
     openPlayer : async function(link,imgUrl){
       const url = config.IMG_SERVER_HOST + "getSimilarImageUrl";
       //const url = "http://127.0.0.1:56653/file_upload/getSimilarImageUrl";
-      const querystring = require("querystring");
+      //const querystring = require("querystring");
       try {
-        const res = await this.axios.post(url,
+        /*const res = await this.axios.post(url,
           querystring.stringify({
              imgUrl: imgUrl, //gave the values directly for testing
         }), {
           headers: { 
            "Content-Type": "application/x-www-form-urlencoded"
           }
-        });
-        let recolist = res.data;
-        this.$emit('getRecommend', recolist)
+        }); */
+      
+        let params = new URLSearchParams();
+        params.append('imgUrl', imgUrl);
+        let save = this;
+        this.axios.post(url,params)
+        .then((res) => {
+          // response.data;
+          let recolist = res.data;
+          save.$emit('getRecommend', recolist)   
+        }) 
+
+        //let recolist = res.data;
+        //this.$emit('getRecommend', recolist)
       }catch(e){ 
         console.log(e);
         // alert(e);
