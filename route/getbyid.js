@@ -1,4 +1,3 @@
-//const { BIconSortNumericUpAlt } = require('bootstrap-vue');
 var express = require('express');
 var router = express.Router();
 
@@ -10,14 +9,13 @@ const collectionName = 'webcom';
 /* 
  * npx cross-env DEBUG=web-com-api:* npm start
  * http://localhost:<port>/list 
- * 
+ * g
  */
-router.get('/', function (req, res) {
+router.post('/', function (req, res) {
 
-    let code = req.query.countrycd;
-    let lastid = req.query.lastid  == undefined ? "0" : req.query.lastid ;
+    let id = req.body.id   ;
     try {
-        transaction(code,lastid).then(value => {
+        transaction(id).then(value => {
             res.header('Content-Type', 'application/json; charset=utf-8')
          //   res.header("Access-Control-Allow-Origin", "*");
           //  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
@@ -34,7 +32,7 @@ router.get('/', function (req, res) {
 });
 
 
-const transaction = async (countrycd,lastid) => {
+const transaction = async (webcamid) => {
     let client;
 
     try {
@@ -46,21 +44,20 @@ const transaction = async (countrycd,lastid) => {
         let db = client.db(collectionName);
         let list = [];
         //let docs = 
-        let condition = [ {"status": "active"},{"location.country_code":countrycd},{"id":{$gt:lastid }}] ;
+        let condition = [ {"status": "active"},{"id":webcamid}] ;
+
         await db.collection(collectionName)
         .find({$and: condition })
-        .sort({"id":1}).limit(100).forEach(function (doc){
+        .forEach(function (doc){
 
             let webComData = {
                 id : doc.id,
-                thumbnail: doc.image.daylight.thumbnail,
-                player: doc.player.day.link,
-                latitude: doc.location.latitude,
-                longitude: doc.location.longitude 
+                player: doc.player.day.link
             };
-            list.push(webComData);
+             
+            list.unshift(webComData);
         });
-        
+
         return (list);
     } catch (error) {
         console.log(error);
@@ -68,6 +65,7 @@ const transaction = async (countrycd,lastid) => {
         client.close();
 
     }
+
 }
 
 module.exports = router;
