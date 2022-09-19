@@ -1,10 +1,9 @@
 var express = require('express');
 var router = express.Router();
 
-const mongodb = require('mongodb');
-const MongoClient = mongodb.MongoClient;
-
 const collectionName = 'webcom';
+const dao = require('../util/dao');
+
 
 /* 
  * npx cross-env DEBUG=web-com-api:* npm start
@@ -34,42 +33,19 @@ router.get('/', function (req, res) {
 
 
 const transaction = async (countrycd,lastid) => {
-    let client;
 
     try {
 
-        client = await MongoClient.connect("mongodb://webcom:webcom@127.0.0.1:27017/webcom", {
-            useUnifiedTopology: true
-        });
-       
-        let db = client.db(collectionName);
         let list = [];
-        //let docs = 
         let condition = [ {"status": "active"},{"location.country_code":countrycd},{"id":{$lt:lastid }}] ;
-
-        await db.collection(collectionName)
-        .find({$and: condition })
-        .sort({"id":-1}).limit(100).forEach(function (doc){
-
-            let webComData = {
-                id : doc.id,
-                thumbnail: doc.image.daylight.thumbnail,
-                player: doc.player.day.link
-            };
-             
-            list.unshift(webComData);
-        });
-
-        // console.log(list);
-
+        let limit=100;
+        list = await dao.findList(collectionName,condition,limit);
         return (list);
     } catch (error) {
         console.log(error);
     } finally {
-        client.close();
-
+//        client.close();
     }
-
 }
 
 module.exports = router;
