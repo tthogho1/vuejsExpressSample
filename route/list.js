@@ -3,7 +3,7 @@ var express = require('express');
 var router = express.Router();
 
 const dao = require('../util/dao');
-
+const logger = require('../util/logger');
 const collectionName = 'webcom';
 
 
@@ -13,7 +13,7 @@ const collectionName = 'webcom';
  * 
  */
 router.get('/', function (req, res) {
-
+    logger.AppLogger.info('list');
     let code = req.query.countrycd;
     let lastid = req.query.lastid  == undefined ? "0" : req.query.lastid ;
     try {
