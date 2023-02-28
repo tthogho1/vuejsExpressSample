@@ -4,11 +4,11 @@ const MongoClient = mongodb.MongoClient;
 var db;
 
 async function getConnection() {
-    var client = await MongoClient.connect("mongodb://webcom:webcom@127.0.0.1:27017/webcom", {
+    var client = await MongoClient.connect("mongodb://webcam:webcam@127.0.0.1:27017/webcam", {
         useUnifiedTopology: true
     });
 
-    db = client.db("webcom");
+    db = client.db("webcam");
 }
 
 getConnection().then(console.log("connected"));
@@ -50,6 +50,14 @@ module.exports = {
 
         // console.log(list);
 
+        return (list);
+    },
+  
+    coutryCdList : async function(collectionName) {
+        let list = [];
+        list = await db.collection(collectionName)
+        .distinct("location.countrycode",{});
+        
         return (list);
     },
 };

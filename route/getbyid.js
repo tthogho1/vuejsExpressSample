@@ -4,7 +4,7 @@ var router = express.Router();
 const mongodb = require('mongodb');
 const MongoClient = mongodb.MongoClient;
 
-const collectionName = 'webcom';
+const collectionName = 'webcam';
 
 /* 
  * npx cross-env DEBUG=web-com-api:* npm start
