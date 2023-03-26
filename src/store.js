@@ -5,7 +5,8 @@ export const store = createStore({
         return {
             list:[],
             countrycd:'',
-            message:'test'
+            message:'test',
+            countrycdList:[]
         }
     }, 
     mutations:{
@@ -17,6 +18,9 @@ export const store = createStore({
         },
         msgtest:(state,msg)=>{
             state.message=msg;
+        },
+        savecountrycdList:(state,countrycdList)=>{
+            state.countrycdList = countrycdList;
         }
     }
 })

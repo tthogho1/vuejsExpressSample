@@ -4,10 +4,9 @@
       <div class="col-2"><label for="select1">Country Code</label></div>
       <div class="col-2">
         <select id="select1" v-model="countrycd">
-          <option>JP</option>
-          <option>AL</option>
-          <option>DZ</option>
-          <option>US</option>
+          <option v-for="cd in countrycdList" :key="cd">
+            {{ cd }}
+          </option>
         </select>
       </div>
       <div class="col-2">
@@ -70,10 +69,15 @@ export default {
        savedcountrycd:'',
        avgLat:'',
        avgLng:'',
-       recolist:[]
+       recolist:[],
+       countrycdList:[]
     }
   },
   mounted(){
+    this.countrycdList = this.$store.state.countrycdList;
+    if (this.countrycdList.length == 0){
+      this.getCountryCdList();
+    } 
     this.list = this.$store.state.list;
     this.countrycd = this.$store.state.countrycd;
     this.savedcountrycd = this.$store.state.countrycd;
@@ -139,7 +143,16 @@ export default {
     getRecommend:function(recolist){
       // 0 - similarity 1 : distance
       this.recolist = recolist[0];
-    }
+    },
+    getCountryCdList:function(){
+      
+      this.axios.get("/api/countrycdlist").then((response) => {
+        this.countrycdList=response.data;
+        this.$store.commit('savecountrycdList',this.countrycdList);
+      }).catch((error) => {
+        alert("error " + error) ;
+      })
+    }    
   }
 }
 </script>
